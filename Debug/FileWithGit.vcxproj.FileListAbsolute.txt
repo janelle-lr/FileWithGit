@@ -1,1 +1,2 @@
 C:\Users\jmoir\Desktop\CS103_lab4\member1\FileWithGit\Debug\FileWithGit.exe
+C:\Users\jmoir\Desktop\CS103_lab4\member2\FileWithGit\Debug\FileWithGit.exe
