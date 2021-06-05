@@ -1,4 +1,4 @@
-Louis Vuitton	leather	small	pink	345
+LV	leather	small	pink	345
 Kmart	canvas	large	green	10.99
 Chanel	tweed	medium	beige	5000
 Dior	jean	large	blue	400.5

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -15,35 +16,31 @@ struct Jacket {
     float price = 0;
 };
 
-struct Jacket* inputJacketDetails(struct Jacket* j) {
+struct Jacket* inputJacketDetails(struct Jacket* jacketPtr) {
     int i;
 
     for (i = 0; i < 5; i++) {
+        cout << "Jacket " << i + 1 << " Input" << endl;
         cout << "Enter jacket brand : ";
-        getline(cin, j->brand);
+        getline(cin, jacketPtr->brand);
         cout << "Enter jacket material : ";
-        getline(cin, j->material);
+        getline(cin, jacketPtr->material);
         cout << "Enter jacket size : ";
-        getline(cin, j->size);
+        getline(cin, jacketPtr->size);
         cout << "Enter jacket color : ";
-        cin >> j->color;
+        cin >> jacketPtr->color;
         cout << "Enter jacket price : ";
-        cin >> j->price;
+        cin >> jacketPtr->price;
         cout << "\n";
         cin.ignore();
-        j++;
+        jacketPtr++;
     }
 
-    return (j);
+    return (jacketPtr);
 }
 
-int main()
-{
-    struct Jacket jckt[5];
-    struct Jacket* j = jckt;
+struct Jacket* writingToTxtFile(struct Jacket* jacketPtr) {
     int i;
-
-    inputJacketDetails(j);
 
     //writing to the file
     fstream jacketFile;
@@ -53,13 +50,81 @@ int main()
 
     //writing input data into file
     for (i = 0; i < 5; i++) {
-        jacketFile << j->brand << "\t";
-        jacketFile << j->material << "\t";
-        jacketFile << j->size << "\t";
-        jacketFile << j->color << "\t";
-        jacketFile << j->price << endl;
-        j++;
+        jacketFile << jacketPtr->brand << "\t";
+        jacketFile << jacketPtr->material << "\t";
+        jacketFile << jacketPtr->size << "\t";
+        jacketFile << jacketPtr->color << "\t";
+        jacketFile << jacketPtr->price << endl;
+        jacketPtr++;
     }
-    cout << "\nStored details into the file" << endl;
+    cout << "\nInput data stored into txt file" << endl;
+
+    //close the file
     jacketFile.close();
+
+    return(jacketPtr);
+}
+
+void txtFileOutput() {
+    string fileData;
+
+    //open the file in read mode
+    ifstream jcktFle;
+    jcktFle.open("jacket.txt", ios::in);
+
+    //display data written in file
+    cout << "\nReading data from txt file" << endl;
+    while (getline(jcktFle, fileData))
+    {
+        cout << fileData << endl;
+    }
+
+    jcktFle.close();
+}
+
+void sizeSearch() {
+    string id, col2, col1, col3, fd;
+    int jacketCount = 0;
+
+    fstream jf;
+    jf.open("jacket.txt", ios::in);
+
+    cout << "\nPlease enter desired jacket size : ";
+    cin >> id;
+
+    //jacket size checker
+    while (getline(jf, fd)) {
+        istringstream ss(fd);
+        ss >> col1 >> col2 >> col3;
+        if (col3 == id) {
+            jacketCount++;
+        }
+    }
+
+    if (jacketCount >= 1) {
+        cout << "\nThere were " << jacketCount << " jacket(s) found under that size" << endl;
+    }
+    else {
+        cout << "\nThere were no jackets found under that size";
+    }
+    cout << "\n";
+
+    //close the file
+    jf.close();
+}
+
+int main()
+{
+    struct Jacket jckt[5];
+    struct Jacket* j = jckt;//assigning pointer to jacket array of struct
+
+    inputJacketDetails(j);
+
+    writingToTxtFile(j);
+
+    txtFileOutput();
+
+    sizeSearch();
+
+    return 0;
 }
